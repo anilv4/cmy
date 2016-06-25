@@ -1,2 +1,2 @@
 # cmy
-"cmy" stands for Clear Mind YAML. Pronounced as, c-mee . . .
+DUMP your thoughts and CLEAR your mind using "cmy". Pronounced as, c-mee . . .
