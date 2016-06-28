@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # cmy:- c-mee
 # DUMP your thoughts and CLEAR your mind using c-mee.
-# Version : v1-beta 
+# Version : v1-beta2 
 # email:- cmy.project.mail@gmail.com
 # cmy is short form of Clear Mind YAML
 
@@ -122,7 +122,8 @@ def check_for_today_key(cmy_dir, now):
 	if not yaml_raw_data.has_key(today):
 		data_to_append = first_log_entry(now)
 		yaml_raw_data[today] = data_to_append[today]
-		yaml_data_final = yaml_printer(yaml_data_dict)
+		yaml_data_dict_modified = yaml_raw_data
+		yaml_data_final = yaml_printer(yaml_data_dict_modified)
 		write_yaml_file(yaml_file, yaml_data_final)
 def read_conf():
 	cmy_conf = read_yaml_file("cmy.conf")
