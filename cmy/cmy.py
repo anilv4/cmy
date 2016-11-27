@@ -47,8 +47,13 @@ def ttmy():
 
 # Common function for reading the contents in YAML.
 def read_yaml_file(yaml_file):
-	with open(yaml_file, 'r') as yaml_fd:
-		yaml_raw_data = yaml.load(yaml_fd)
+        try:
+                yaml_fd = open(yaml_file, 'r')
+                yaml_raw_data = yaml.load(yaml_fd) or {}
+        except IOError:
+	        print "Error opening cmy.conf."
+		sys.exit()
+    
 	return yaml_raw_data
 
 # list command function
@@ -128,11 +133,17 @@ def check_for_today_key(cmy_dir, now):
 		write_yaml_file(yaml_file, yaml_data_final)
 def read_conf():
 	cmy_conf = read_yaml_file("cmy.conf")
+
+        #check empty dictionary
+        if (not bool(cmy_conf)):
+                print "cmy.conf is empty."
+                sys.exit()
+
 	cmy_dir = cmy_conf['cmy_dir']+"/logs"
-	#print cmy_dir
 	if ("cmy_dir" not in locals() or cmy_dir == ""):
 		print "cmy_dir is empty or not defined. set a location for your logs."
 		sys.exit()
+
 	return cmy_dir
 
 def starting_up():
