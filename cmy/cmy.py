@@ -9,6 +9,9 @@ import yaml
 import datetime
 import os
 import sys
+import io
+from pathlib import Path
+
 
 # Create the yaml file, if it does not exist.
 def create_yaml_file(cmy_dir, now):
@@ -51,7 +54,7 @@ def read_yaml_file(yaml_file):
                 yaml_fd = open(yaml_file, 'r')
                 yaml_raw_data = yaml.load(yaml_fd) or {}
         except IOError:
-	        print "Error opening cmy.conf."
+                print "Error opening cmy.conf."
 		sys.exit()
     
 	return yaml_raw_data
@@ -132,22 +135,56 @@ def check_for_today_key(cmy_dir, now):
 		yaml_data_final = yaml_printer(yaml_data_dict_modified)
 		write_yaml_file(yaml_file, yaml_data_final)
 def read_conf():
-	cmy_conf = read_yaml_file("cmy.conf")
+        #reads the config file located in the home directory.
+	cmy_conf = read_yaml_file(os.path.expanduser('~') + "/.config/cmy/cmy.conf")
 
         #check empty dictionary
         if (not bool(cmy_conf)):
                 print "cmy.conf is empty."
                 sys.exit()
 
-	cmy_dir = cmy_conf['cmy_dir']+"/logs"
+	cmy_dir = os.path.expanduser(cmy_conf['cmy_dir'])
 	if ("cmy_dir" not in locals() or cmy_dir == ""):
 		print "cmy_dir is empty or not defined. set a location for your logs."
 		sys.exit()
 
 	return cmy_dir
 
+def check_conf_file():
+        #checks if the config file exists. If doesn't exist, create a new config file.
+        #<homedir>/.config/cmy/ is the default location of cmy.conf per user.
+        #Returns True if the config file exists or successfully created newly. Returns false otherwise.
+        confdirpath = os.path.expanduser("~/.config/cmy/")
+        conffilepath = confdirpath  + "cmy.conf" 
+        fd = Path(conffilepath)
+
+	if fd.is_file():
+		#File exists                                                                                                                          
+		return True
+	elif fd.is_dir():
+		#Directory with same name exist
+		return False
+	else:
+		#cmy.conf doesn't exist, create a new one.                                                                                            
+
+                #create directory
+                if not os.path.exists(confdirpath):
+                        os.makedirs(confdirpath)
+                        
+                confdata = "# Configuration file for cmy.py\n# The logs are saved in ~/cmy_logs directory by default.\ncmy_dir: ~/cmy_logs/\n"
+		#open(conffilepath, "wt")
+                #open(conffilepath, "a")
+                with open(conffilepath, "w") as f:
+                        f.write(confdata)
+        
+	return True
+
 def starting_up():
-	cmy_dir = read_conf()
+        if not check_conf_file():
+		print "Config file doesn't exist. Problem creating the new config file."
+		sys.exit()
+
+        cmy_dir = read_conf()
 	now = ttmy()
 	args = 	sys.argv
 	create_yaml_file(cmy_dir, now)
@@ -159,9 +196,6 @@ def start_here():
 
 	if len(args) ==	 1:
 		print "Supported options are show, info & todo"
-	elif args[1] == "test":
-		print "test"
-		print yaml_fp_creator(cmy_dir)
 	elif args[1] == "list":
 		print list_cmd(args, cmy_dir, now)
 	elif args[1] == "info":
