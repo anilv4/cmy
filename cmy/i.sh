@@ -1,1 +1,1 @@
-./cmy.py info $@
+/usr/local/bin/cmy.py info $@

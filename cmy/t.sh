@@ -1,1 +1,1 @@
-./cmy.py todo $@
+/usr/local/bin/cmy.py todo $@
