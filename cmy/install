@@ -9,6 +9,3 @@ chmod +x /usr/local/bin/i
 
 cp t.sh /usr/local/bin/t
 chmod +x /usr/local/bin/t
-
-mkdir -p ~/.config/cmy/
-cp cmy.conf ~/.config/cmy/
