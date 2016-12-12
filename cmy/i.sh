@@ -1,2 +1,1 @@
-cd "/location/of/cmy"; 
-/location/of/cmy/cmy.py info $@
+/usr/local/bin/cmy.py info $@
