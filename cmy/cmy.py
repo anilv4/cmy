@@ -195,7 +195,7 @@ def start_here():
 	args, now, cmy_dir = starting_up()
 
 	if len(args) ==	 1:
-		print "Supported options are show, info & todo"
+		print "Usage: cmy.py <options>\nSupported Options: show|info|todo"
 	elif args[1] == "list":
 		print list_cmd(args, cmy_dir, now)
 	elif args[1] == "info":
@@ -203,7 +203,7 @@ def start_here():
 	elif args[1] == "todo":
 		info_todo_cmds(args, cmy_dir, now)
 	else:
-		print "enna maira"
+		print "Invalid Option"
 
 if __name__ == '__main__':
 	start_here()
